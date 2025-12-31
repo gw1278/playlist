@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Playlist</title>
+    <link rel="stylesheet" href="playlist.css" />
+  </head>
+  <body>
+    <!-- 네온 배경 -->
+    <div class="bg"></div>
+
+    <div class="container">
+      <hr />
+
+      <h3>music</h3>
+      <p class="subtitle">playlist</p>
+
+      <hr />
+
+      <!-- 플레이리스트 -->
+      <ul class="playlist reveal">
+        <li data-video="_CpOPe2LAZA">
+          <span class="title">muffin</span>
+          <span class="artist">호미들</span>
+        </li>
+        <li data-video="aF8OFSroHgg">
+          <span class="title">k-flip</span>
+          <span class="artist">식케이</span>
+        </li>
+        <li data-video="fgAY7BJSKsg">
+          <span class="title">이러면 안되는거 같은데 네 앞에만 서면 나락</span>
+          <span class="artist">딘딘</span>
+        </li>
+        <li data-video="2GRP1rkE4O0">
+          <span class="title">blue</span>
+          <span class="artist">빅뱅</span>
+        </li>
+        <li data-video="DDByv3z_z_U">
+          <span class="title">day day</span>
+          <span class="artist">비와이</span>
+        </li>
+      </ul>
+
+      <!-- 유튜브 플레이어 -->
+      <div class="youtube-box reveal" id="playerBox">
+        <iframe
+          id="player"
+          src="https://www.youtube.com/embed/videoseries?list=PL15w8vr3DjmwVWHLsmUddVsfcuPct56hl&mute=1"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+
+      <!-- 하단 링크 -->
+      <div class="playlist-footer">
+        <a
+          href="https://www.youtube.com/playlist?list=PL15w8vr3DjmwVWHLsmUddVsfcuPct56hl"
+          target="_blank"
+        >
+          PLAYLIST
+        </a>
+      </div>
+    </div>
+
+    <script>
+      /* 곡 클릭 → 플레이어 변경 + 자동 스크롤 */
+      const items = document.querySelectorAll('.playlist li');
+      const player = document.getElementById('player');
+      const playerBox = document.getElementById('playerBox');
+
+      items.forEach((item) => {
+        item.addEventListener('click', (e) => {
+          // 클릭 파동
+          item.classList.remove('ripple');
+          void item.offsetWidth; // 리플 재시작
+          item.classList.add('ripple');
+
+          const rect = item.getBoundingClientRect();
+          const ripple = item.querySelector('::after');
+
+          const videoId = item.dataset.video;
+          player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+          items.forEach((i) => i.classList.remove('playing'));
+          item.classList.add('playing');
+
+          playerBox.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+        });
+      });
+
+      /* 스크롤 등장 애니메이션 */
+      const reveals = document.querySelectorAll('.reveal');
+
+      const revealOnScroll = () => {
+        reveals.forEach((el) => {
+          const top = el.getBoundingClientRect().top;
+          const height = window.innerHeight;
+          if (top < height - 100) {
+            el.classList.add('active');
+          }
+        });
+      };
+
+      window.addEventListener('scroll', revealOnScroll);
+      revealOnScroll();
+    </script>
+  </body>
+</html>
